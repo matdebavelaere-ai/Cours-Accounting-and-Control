@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Accounting & Control — Cours Master</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:        #0d0f14;
+    --paper:      #f8f5ef;
+    --cream:      #ede9df;
+    --gold:       #b8933a;
+    --gold-light: #d4b06a;
+    --gold-pale:  #f0e4c4;
+    --steel:      #2c3a4a;
+    --steel-mid:  #4a5d70;
+    --steel-light:#8da0b0;
+    --red:        #9b2335;
+    --green:      #2d6a4a;
+    --accent:     #1a3a5c;
+    --rule:       rgba(184,147,58,0.35);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; font-size: 16px; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Source Serif 4', Georgia, serif;
+    line-height: 1.75;
+    counter-reset: chapter;
+  }
+
+  /* ── SIDEBAR NAV ───────────────────────────────────── */
+  .sidenav {
+    position: fixed; top: 0; left: 0; height: 100vh; width: 270px;
+    background: var(--steel);
+    overflow-y: auto; z-index: 100;
+    display: flex; flex-direction: column;
+    border-right: 3px solid var(--gold);
+    transition: transform .3s ease;
+  }
+  .sidenav-header {
+    padding: 32px 24px 20px;
+    border-bottom: 1px solid rgba(255,255,255,.1);
+  }
+  .sidenav-header .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .65rem; letter-spacing: .15em;
+    text-transform: uppercase; color: var(--gold-light);
+    margin-bottom: 8px;
+  }
+  .sidenav-header h2 {
+    font-family: 'Playfair Display', serif;
+    color: #fff; font-size: 1.15rem; line-height: 1.3;
+  }
+  .nav-section { padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,.07); }
+  .nav-section-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .6rem; letter-spacing: .13em; text-transform: uppercase;
+    color: var(--gold); padding: 0 24px 8px; opacity: .8;
+  }
+  .sidenav a {
+    display: block; padding: 7px 24px;
+    font-family: 'Source Serif 4', serif; font-size: .82rem;
+    color: var(--steel-light); text-decoration: none;
+    border-left: 3px solid transparent;
+    transition: color .2s, border-color .2s, background .2s;
+  }
+  .sidenav a:hover {
+    color: #fff; border-left-color: var(--gold);
+    background: rgba(255,255,255,.05);
+  }
+
+  /* ── MAIN CONTENT ──────────────────────────────────── */
+  .content { margin-left: 270px; }
+
+  /* ── HERO ──────────────────────────────────────────── */
+  .hero {
+    background: var(--steel);
+    padding: 90px 80px 80px;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 39px,
+        rgba(184,147,58,.08) 39px,
+        rgba(184,147,58,.08) 40px
+      );
+  }
+  .hero::after {
+    content: 'A&C';
+    position: absolute; right: -20px; top: 50%; transform: translateY(-50%);
+    font-family: 'Playfair Display', serif; font-size: 20rem; font-weight: 900;
+    color: rgba(255,255,255,.03); line-height: 1; pointer-events: none;
+    user-select: none;
+  }
+  .hero-inner { position: relative; max-width: 780px; }
+  .hero .tag {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .7rem; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--gold); border: 1px solid var(--gold);
+    padding: 5px 14px; border-radius: 2px; margin-bottom: 28px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.4rem; font-weight: 900; line-height: 1.1;
+    color: #fff; margin-bottom: 22px;
+  }
+  .hero h1 em { color: var(--gold-light); font-style: normal; }
+  .hero p {
+    font-size: 1.05rem; color: rgba(255,255,255,.65);
+    max-width: 600px; line-height: 1.7;
+  }
+  .hero-meta {
+    margin-top: 40px; display: flex; gap: 40px; flex-wrap: wrap;
+  }
+  .hero-meta-item .key {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .62rem; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--gold); opacity: .7;
+    display: block; margin-bottom: 4px;
+  }
+  .hero-meta-item .val {
+    color: rgba(255,255,255,.8); font-size: .9rem;
+  }
+
+  /* ── CHAPTER WRAPPER ───────────────────────────────── */
+  .chapter {
+    max-width: 900px; margin: 0 auto;
+    padding: 70px 60px 50px;
+    border-bottom: 1px solid var(--cream);
+  }
+
+  .chapter-header {
+    display: flex; align-items: flex-start; gap: 24px;
+    margin-bottom: 44px;
+  }
+  .ch-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem; font-weight: 900; line-height: 1;
+    color: var(--gold-pale); user-select: none; flex-shrink: 0;
+    counter-increment: chapter;
+  }
+  .ch-titles { flex: 1; }
+  .ch-part {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .65rem; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 6px; display: block;
+  }
+  .ch-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem; font-weight: 700; color: var(--accent);
+    line-height: 1.2;
+  }
+
+  /* ── TYPOGRAPHY ────────────────────────────────────── */
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.45rem; font-weight: 700; color: var(--accent);
+    margin: 44px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--gold-pale);
+  }
+  h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem; font-weight: 700; color: var(--steel);
+    margin: 32px 0 12px;
+  }
+  h4 {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1rem; font-weight: 600; color: var(--steel-mid);
+    margin: 22px 0 8px; text-transform: uppercase;
+    letter-spacing: .05em; font-size: .85rem;
+  }
+  p { margin-bottom: 14px; }
+
+  /* ── COMPONENTS ────────────────────────────────────── */
+
+  /* Key Definition */
+  .def {
+    background: var(--cream); border-left: 4px solid var(--gold);
+    padding: 16px 20px; margin: 20px 0; border-radius: 0 6px 6px 0;
+  }
+  .def strong { color: var(--gold); }
+
+  /* Alert / important */
+  .alert {
+    background: #fff8f0; border: 1px solid #e8c878; border-left: 4px solid #c8930a;
+    padding: 14px 18px; margin: 20px 0; border-radius: 0 6px 6px 0;
+    font-size: .9rem;
+  }
+  .alert .alert-title {
+    font-family: 'JetBrains Mono', monospace; font-size: .7rem;
+    letter-spacing: .12em; text-transform: uppercase;
+    color: #c8930a; display: block; margin-bottom: 5px;
+  }
+
+  /* Formula box */
+  .formula-box {
+    background: var(--steel); color: #fff;
+    border: 1px solid var(--gold);
+    padding: 20px 28px; margin: 22px 0;
+    border-radius: 6px; font-family: 'JetBrains Mono', monospace;
+    font-size: .9rem; line-height: 1.9;
+  }
+  .formula-box .formula-title {
+    font-size: .65rem; letter-spacing: .15em; text-transform: uppercase;
+    color: var(--gold-light); margin-bottom: 12px; display: block;
+  }
+  .formula-box .f { color: #fff; }
+  .formula-box .f .hl { color: var(--gold-light); }
+  .formula-box .f .cm { color: var(--steel-light); font-style: italic; font-size: .8rem; }
+
+  /* Table */
+  .tbl-wrap { overflow-x: auto; margin: 22px 0; }
+  table {
+    width: 100%; border-collapse: collapse;
+    font-size: .88rem;
+  }
+  thead tr { background: var(--steel); color: #fff; }
+  thead th {
+    padding: 11px 16px; text-align: left;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .7rem; letter-spacing: .1em; text-transform: uppercase;
+    font-weight: 600;
+  }
+  tbody tr:nth-child(even) { background: var(--cream); }
+  tbody td {
+    padding: 10px 16px;
+    border-bottom: 1px solid rgba(0,0,0,.06);
+    vertical-align: top;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  td.r { text-align: right; font-family: 'JetBrains Mono', monospace; }
+  td.bold { font-weight: 600; }
+  td.indent { padding-left: 36px; }
+  td.total {
+    font-weight: 700; border-top: 2px solid var(--gold);
+    color: var(--accent);
+  }
+
+  /* KPI cards grid */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 16px; margin: 24px 0;
+  }
+  .kpi-card {
+    background: #fff; border: 1px solid var(--cream);
+    border-top: 3px solid var(--gold);
+    padding: 18px 20px; border-radius: 4px;
+    box-shadow: 0 2px 12px rgba(0,0,0,.05);
+    transition: transform .2s, box-shadow .2s;
+  }
+  .kpi-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(0,0,0,.1);
+  }
+  .kpi-card .kpi-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .7rem; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--steel-mid); margin-bottom: 8px; display: block;
+  }
+  .kpi-card .kpi-formula {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .82rem; color: var(--steel);
+    background: var(--cream); padding: 6px 10px;
+    border-radius: 3px; margin-bottom: 8px;
+    line-height: 1.5;
+  }
+  .kpi-card .kpi-desc { font-size: .82rem; color: var(--steel-mid); }
+  .kpi-card .kpi-bench {
+    margin-top: 8px; font-size: .75rem;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--green); background: #edf7f2;
+    padding: 3px 8px; display: inline-block; border-radius: 2px;
+  }
+
+  /* Two-column balance sheet */
+  .balance-sheet {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 0; margin: 24px 0;
+    border: 1px solid var(--cream);
+    border-radius: 6px; overflow: hidden;
+  }
+  .bs-col { }
+  .bs-col:first-child { border-right: 2px solid var(--gold); }
+  .bs-col-header {
+    background: var(--accent); color: #fff;
+    padding: 12px 18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .7rem; letter-spacing: .15em;
+    text-transform: uppercase; text-align: center;
+  }
+  .bs-row {
+    display: flex; justify-content: space-between;
+    padding: 8px 18px; font-size: .87rem;
+    border-bottom: 1px solid var(--cream);
+  }
+  .bs-row:nth-child(even) { background: var(--cream); }
+  .bs-row.section {
+    background: var(--gold-pale);
+    font-weight: 700; font-size: .85rem;
+    color: var(--accent);
+  }
+  .bs-row.total-row {
+    background: var(--steel); color: #fff;
+    font-weight: 700; border-bottom: none;
+  }
+  .bs-row .amt {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .82rem;
+  }
+
+  /* Steps */
+  .steps { counter-reset: step; margin: 20px 0; }
+  .step {
+    display: flex; gap: 18px; margin-bottom: 18px;
+    align-items: flex-start;
+  }
+  .step::before {
+    counter-increment: step;
+    content: counter(step);
+    flex-shrink: 0; width: 32px; height: 32px;
+    background: var(--accent); color: #fff;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .8rem; font-weight: 600; margin-top: 2px;
+  }
+  .step-content strong { color: var(--accent); }
+
+  /* Tag badges */
+  .badge {
+    display: inline-block; padding: 2px 10px;
+    border-radius: 3px; font-family: 'JetBrains Mono', monospace;
+    font-size: .68rem; letter-spacing: .08em; font-weight: 600;
+    text-transform: uppercase; vertical-align: middle;
+  }
+  .badge-red { background: #fdecea; color: var(--red); }
+  .badge-green { background: #e8f5ee; color: var(--green); }
+  .badge-gold { background: var(--gold-pale); color: #7a5f20; }
+
+  /* Ratio category separators */
+  .ratio-section { margin: 30px 0 12px; }
+  .ratio-section-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .68rem; letter-spacing: .16em; text-transform: uppercase;
+    color: #fff; background: var(--steel-mid);
+    padding: 6px 16px; display: inline-block; border-radius: 3px;
+  }
+
+  /* Code-style inline */
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .82rem; background: var(--cream);
+    padding: 1px 6px; border-radius: 3px; color: var(--accent);
+  }
+
+  /* Pull quote */
+  blockquote {
+    border-left: 4px solid var(--gold);
+    padding: 14px 24px; margin: 24px 0;
+    font-style: italic; color: var(--steel-mid);
+    font-size: 1.02rem;
+    background: linear-gradient(90deg, var(--gold-pale) 0%, transparent 100%);
+  }
+
+  /* Divider */
+  .divider {
+    border: none; border-top: 1px solid var(--rule);
+    margin: 40px 0;
+  }
+
+  /* Checklist */
+  .checklist { list-style: none; margin: 16px 0; }
+  .checklist li {
+    padding: 5px 0 5px 28px; position: relative;
+    font-size: .92rem;
+  }
+  .checklist li::before {
+    content: '▸';
+    position: absolute; left: 6px;
+    color: var(--gold); font-size: .8rem;
+  }
+
+  /* Footer */
+  .page-footer {
+    background: var(--steel); color: rgba(255,255,255,.4);
+    padding: 40px 60px; margin-left: 270px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .72rem; letter-spacing: .05em;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .page-footer span { color: var(--gold); }
+
+  /* ── RESPONSIVE ────────────────────────────────────── */
+  @media (max-width: 900px) {
+    .sidenav { transform: translateX(-100%); }
+    .content, .page-footer { margin-left: 0; }
+    .hero { padding: 60px 28px 50px; }
+    .hero h1 { font-size: 2.2rem; }
+    .chapter { padding: 50px 28px 40px; }
+    .balance-sheet { grid-template-columns: 1fr; }
+    .bs-col:first-child { border-right: none; border-bottom: 2px solid var(--gold); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════
+     SIDE NAVIGATION
+══════════════════════════════════════════════════════ -->
+<nav class="sidenav">
+  <div class="sidenav-header">
+    <div class="label">Master — Programme</div>
+    <h2>Accounting &amp;<br>Control</h2>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-title">I · États Financiers</div>
+    <a href="#bilan">Le Bilan comptable</a>
+    <a href="#cr">Compte de Résultat</a>
+    <a href="#tft">Tableau de Flux de Trésorerie</a>
+    <a href="#annexe">L'Annexe</a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-title">II · Contrôle de Gestion</div>
+    <a href="#cdg-intro">Fondements</a>
+    <a href="#couts">Méthodes de Coûts</a>
+    <a href="#budget">Gestion Budgétaire</a>
+    <a href="#ecarts">Analyse des Écarts</a>
+    <a href="#tableau-bord">Tableaux de Bord &amp; BSC</a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-title">III · Gestion Financière</div>
+    <a href="#diagnostic">Diagnostic Financier</a>
+    <a href="#fr-bfr">FR, BFR &amp; Trésorerie</a>
+    <a href="#invest">Évaluation des Investissements</a>
+    <a href="#financement">Structure de Financement</a>
+    <a href="#valeur">Création de Valeur</a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-title">IV · Synthèse</div>
+    <a href="#kpi-master">KPIs Essentiels</a>
+    <a href="#methodo">Méthodologie d'Analyse</a>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════
+     MAIN
+══════════════════════════════════════════════════════ -->
+<main class="content">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="tag">Cours Master · Niveau M2</div>
+      <h1>Accounting<br>&amp; <em>Control</em></h1>
+      <p>Maîtrise complète des états financiers, du contrôle de gestion et de la gestion financière — du référentiel comptable à la création de valeur actionnariale.</p>
+      <div class="hero-meta">
+        <div class="hero-meta-item">
+          <span class="key">Niveau</span>
+          <span class="val">Master 2 — Finance / CCA</span>
+        </div>
+        <div class="hero-meta-item">
+          <span class="key">Référentiel</span>
+          <span class="val">IFRS · PCG · Normes françaises</span>
+        </div>
+        <div class="hero-meta-item">
+          <span class="key">Objectif</span>
+          <span class="val">Diagnostic financier complet</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+  <!-- ═══════════════════════════════════════════════
+       PARTIE I — ÉTATS FINANCIERS
+  ══════════════════════════════════════════════════ -->
+
+  <!-- ── BILAN ── -->
+  <section class="chapter" id="bilan">
+    <div class="chapter-header">
+      <div class="ch-num">01</div>
+      <div class="ch-titles">
+        <span class="ch-part">Partie I · États Financiers</span>
+        <h1 class="ch-title">Le Bilan Comptable</h1>
+      </div>
+    </div>
+
+    <div class="def">
+      <strong>Définition fondamentale :</strong> Le bilan est une <em>photographie</em> du patrimoine de l'entreprise à une date donnée (clôture). Il traduit l'équation fondamentale de la comptabilité :
+      <br><br>
+      <strong>ACTIF = PASSIF = Capitaux Propres + Dettes</strong>
+    </div>
+
+    <h2>Structure du Bilan (Normes françaises PCG)</h2>
+
+    <div class="balance-sheet">
+      <!-- ACTIF -->
+      <div class="bs-col">
+        <div class="bs-col-header">ACTIF (Emplois)</div>
+        <div class="bs-row section"><span>ACTIF IMMOBILISÉ</span></div>
+        <div class="bs-row"><span>Immobilisations incorporelles</span><span class="amt">→ Brut – Amort.</span></div>
+        <div class="bs-row"><span>Immobilisations corporelles</span><span class="amt">→ Brut – Amort.</span></div>
+        <div class="bs-row"><span>Immobilisations financières</span><span class="amt">→ Brut – Dépréc.</span></div>
+        <div class="bs-row section"><span>ACTIF CIRCULANT</span></div>
+        <div class="bs-row"><span>Stocks &amp; En-cours</span></div>
+        <div class="bs-row"><span>Créances clients</span></div>
+        <div class="bs-row"><span>Autres créances</span></div>
+        <div class="bs-row"><span>Valeurs Mobilières de Placement</span></div>
+        <div class="bs-row"><span>Disponibilités</span></div>
+        <div class="bs-row total-row"><span>TOTAL ACTIF</span><span class="amt">= ΣA</span></div>
+      </div>
+      <!-- PASSIF -->
+      <div class="bs-col">
+        <div class="bs-col-header">PASSIF (Ressources)</div>
+        <div class="bs-row section"><span>CAPITAUX PROPRES</span></div>
+        <div class="bs-row"><span>Capital social</span></div>
+        <div class="bs-row"><span>Réserves (légale, statutaire…)</span></div>
+        <div class="bs-row"><span>Report à nouveau</span></div>
+        <div class="bs-row"><span>Résultat de l'exercice</span></div>
+        <div class="bs-row section"><span>PROVISIONS pour risques</span></div>
+        <div class="bs-row section"><span>DETTES</span></div>
+        <div class="bs-row"><span>Emprunts &amp; dettes financières</span></div>
+        <div class="bs-row"><span>Dettes fournisseurs</span></div>
+        <div class="bs-row"><span>Dettes fiscales &amp; sociales</span></div>
+        <div class="bs-row"><span>Autres dettes</span></div>
+        <div class="bs-row total-row"><span>TOTAL PASSIF</span><span class="amt">= ΣA</span></div>
+      </div>
+    </div>
+
+    <h2>Bilan Fonctionnel vs. Bilan Financier (Liquidité)</h2>
+    <p>En analyse financière, on retravaille le bilan comptable selon deux approches :</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Critère</th><th>Bilan Fonctionnel</th><th>Bilan Financier (liquidité)</th></tr></thead>
+        <tbody>
+          <tr><td>Logique</td><td>Cycles économiques (investissement / exploitation)</td><td>Liquidité / exigibilité croissante</td></tr>
+          <tr><td>Actif</td><td>Emplois stables / AC d'exploitation / hors exploitation</td><td>Actifs ≥ 1 an → actifs &lt; 1 an</td></tr>
+          <tr><td>Passif</td><td>Ressources stables / DCT exploitation / hors exploitation</td><td>CP → dettes LT → dettes CT</td></tr>
+          <tr><td>Usage</td><td>Calcul FR, BFR, Trésorerie nette</td><td>Solvabilité, risque de faillite</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="alert">
+      <span class="alert-title">⚠ Point IFRS</span>
+      En normes IFRS (IAS 1), le bilan est nommé <em>État de la Situation Financière</em>. Les actifs et passifs sont classés courant / non courant (seuil : 12 mois ou cycle d'exploitation).
+    </div>
+  </section>
+
+  <!-- ── COMPTE DE RÉSULTAT ── -->
+  <section class="chapter" id="cr">
+    <div class="chapter-header">
+      <div class="ch-num">02</div>
+      <div class="ch-titles">
+        <span class="ch-part">Partie I · États Financiers</span>
+        <h1 class="ch-title">Le Compte de Résultat</h1>
+      </div>
+    </div>
+
+    <div class="def">
+      <strong>Définition :</strong> Le compte de résultat récapitule les <em>flux de richesse</em> (produits et charges) sur un exercice. Il mesure la performance économique de l'entreprise et détermine son résultat net.
+    </div>
+
+    <h2>Structure et Soldes Intermédiaires de Gestion (SIG)</h2>
+    <p>Les SIG décomposent la formation du résultat en paliers d'analyse :</p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Solde</th><th>Calcul</th><th>Signification</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="bold">Marge commerciale</td>
+            <td><code>Ventes marchandises − Coût achat marchandises</code></td>
+            <td>Rentabilité de l'activité négoce</td>
+          </tr>
+          <tr>
+            <td class="bold">Production de l'exercice</td>
+            <td><code>Prod. vendue + stockée + immobilisée</code></td>
+            <td>Volume d'activité industrielle ou de services</td>
+          </tr>
+          <tr style="background:#fdf7e8">
+            <td class="bold">Valeur Ajoutée (VA)</td>
+            <td><code>Marge com. + Production − Consommations externes</code></td>
+            <td>Richesse créée par l'entreprise, répartie entre parties prenantes</td>
+          </tr>
+          <tr>
+            <td class="bold">EBE</td>
+            <td><code>VA + Subv. exploitation − Impôts/taxes − Charges personnel</code></td>
+            <td>Cash-flow d'exploitation brut (avant amort. &amp; financier)</td>
+          </tr>
+          <tr>
+            <td class="bold">Résultat d'exploitation</td>
+            <td><code>EBE + Reprises − Dotations aux amortissements &amp; provisions</code></td>
+            <td>Performance opérationnelle (hors financier &amp; exceptionnel)</td>
+          </tr>
+          <tr>
+            <td class="bold">Résultat financier</td>
+            <td><code>Produits financiers − Charges financières</code></td>
+            <td>Impact de la politique de financement</td>
+          </tr>
+          <tr style="background:#fdf7e8">
+            <td class="bold">Résultat courant avant impôt</td>
+            <td><code>Résultat exploitation + Résultat financier</code></td>
+            <td>Performance récurrente de l'entreprise</td>
+          </tr>
+          <tr>
+            <td class="bold">Résultat exceptionnel</td>
+            <td><code>Produits except. − Charges except.</code></td>
+            <td>Opérations non récurrentes (cessions, restructurations)</td>
+          </tr>
+          <tr style="background:#e8f0f5">
+            <td class="bold">Résultat Net</td>
+            <td><code>Résultat courant + Exceptionnel − IS − Participation</code></td>
+            <td>Profit final attribuable aux actionnaires</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Calculs Essentiels — Marges &amp; Rentabilité</h2>
+
+    <div class="formula-box">
+      <span class="formula-title">Indicateurs de Marge</span>
+      <div class="f">Taux de marge brute      = <span class="hl">Marge brute / CA HT × 100</span></div>
+      <div class="f">Taux de marge d'EBE      = <span class="hl">EBE / CA HT × 100</span>           <span class="cm">// EBITDA margin</span></div>
+      <div class="f">Taux de marge opérat.    = <span class="hl">Résultat exploit. / CA HT × 100</span> <span class="cm">// EBIT margin</span></div>
+      <div class="f">Taux de marge nette      = <span class="hl">Résultat net / CA HT × 100</span></div>
+      <div class="f">Taux de VA               = <span class="hl">VA / CA HT × 100</span></div>
+    </div>
+
+    <h2>EBITDA, EBIT, NOPAT — Correspondances IFRS</h2>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Indicateur IFRS</th><th>Équivalent PCG (SIG)</th><th>Formule clé</th></tr></thead>
+        <tbody>
+          <tr><td>EBITDA</td><td>EBE</td><td>Résultat opérationnel + Amort./Dépréc. + Provisions</td></tr>
+          <tr><td>EBIT</td><td>Résultat d'exploitation</td><td>EBITDA − Amortissements − Dépréciations</td></tr>
+          <tr><td>NOPAT</td><td>Résultat opérationnel après IS</td><td>EBIT × (1 − taux IS)</td></tr>
+          <tr><td>Net Income</td><td>Résultat Net</td><td>EBT − Impôt sur les bénéfices</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── TABLEAU DE FLUX ── -->
+  <section class="chapter" id="tft">
+    <div class="chapter-header">
+      <div class="ch-num">03</div>
+      <div class="ch-titles">
+        <span class="ch-part">Partie I · États Financiers</span>
+        <h1 class="ch-title">Tableau des Flux de Trésorerie</h1>
+      </div>
+    </div>
+
+    <div class="def">
+      <strong>Définition :</strong> Le TFT (ou Cash Flow Statement, IAS 7) explique la variation de la trésorerie nette sur l'exercice en la décomposant selon trois activités : opérationnelle, d'investissement et de financement.
+    </div>
+
+    <h2>Structure du Tableau de Flux (méthode indirecte)</h2>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Rubrique</th><th>Éléments</th><th>Signe typique</th></tr></thead>
+        <tbody>
+          <tr><td class="bold" colspan="3" style="background:var(--gold-pale);color:var(--accent)">A — Flux de trésorerie opérationnels (FTO)</td></tr>
+          <tr><td>Résultat net</td><td>Point de départ</td><td class="r badge badge-green">+</td></tr>
+          <tr><td class="indent">+ Dotations amort. &amp; provisions</td><td>Retraitement non-cash</td><td class="r badge badge-green">+</td></tr>
+          <tr><td class="indent">± Variation du BFR</td><td>Δ stocks + Δ créances − Δ dettes exploit.</td><td class="r">± </td></tr>
+          <tr><td class="bold total">= Capacité d'Autofinancement (CAF)</td><td>Résultat net + dotations − reprises (méthode additive)</td><td class="r bold">≥ 0 idéal</td></tr>
+          <tr><td class="bold" colspan="3" style="background:var(--gold-pale);color:var(--accent)">B — Flux de trésorerie d'investissement (FTI)</td></tr>
+          <tr><td>Acquisitions d'immobilisations</td><td>CAPEX</td><td class="r badge badge-red">−</td></tr>
+          <tr><td>Cessions d'immobilisations</td><td>Désinvestissements</td><td class="r badge badge-green">+</td></tr>
+          <tr><td class="bold" colspan="3" style="background:var(--gold-pale);color:var(--accent)">C — Flux de trésorerie de financement (FTF)</td></tr>
+          <tr><td>Augmentation de capital</td><td></td><td class="r badge badge-green">+</td></tr>
+          <tr><td>Emprunts nouveaux</td><td></td><td class="r badge badge-green">+</td></tr>
+          <tr><td>Remboursements emprunts</td><td></td><td class="r badge badge-red">−</td></tr>
+          <tr><td>Dividendes versés</td><td></td><td class="r badge badge-red">−</td></tr>
+          <tr><td class="bold total">Variation trésorerie nette</td><td>A + B + C</td><td class="r bold">= ΔTN</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="formula-box">
+      <span class="formula-title">Calcul de la CAF (méthode soustractive)</span>
+      <div class="f">CAF = <span class="hl">EBE</span> + Produits financiers encaissables</div>
+      <div class="f">    − Charges financières décaissables</div>
+      <div class="f">    + Produits exceptionnels encaissables</div>
+      <div class="f">    − Charges exceptionnelles décaissables</div>
+      <div class="f">    − Impôt sur les bénéfices</div>
+      <div class="f">    − Participation des salariés</div>
+    </div>
+
+    <div class="alert">
+      <span class="alert-title">💡 Free Cash Flow</span>
+      Le <strong>Free Cash Flow (FCF)</strong> est l'indicateur clé des investisseurs :<br>
+      <code>FCF = FTO − CAPEX</code> &nbsp;ou&nbsp; <code>FCF = NOPAT + Amort. − ΔBFR − CAPEX</code><br>
+      Un FCF positif signifie que l'entreprise génère suffisamment de trésorerie pour financer sa croissance.
+    </div>
+  </section>
+
+  <!-- ── ANNEXE ── -->
+  <section class="chapter" id="annexe">
+    <div class="chapter-header">
+      <div class="ch-num">04</div>
+      <div class="ch-titles">
+        <span class="ch-part">Partie I · États Financiers</span>
+        <h1 class="ch-title">L'Annexe aux Comptes</h1>
+      </div>
+    </div>
+
+    <p>L'annexe constitue le troisième état financier obligatoire (après le bilan et le CR). Elle complète et commente les données chiffrées.</p>
+
+    <h2>Contenu principal de l'Annexe</h2>
+    <ul class="checklist">
+      <li>Méthodes comptables retenues (modes d'amortissement, méthodes d'évaluation des stocks : FIFO, CMP, LIFO)</li>
+      <li>Tableau des immobilisations et des amortissements</li>
+      <li>Tableau des provisions</li>
+      <li>Détail des créances et des dettes par échéance</li>
+      <li>Engagements hors bilan (garanties, crédit-bail, engagements de retraite)</li>
+      <li>Événements post-clôture significatifs</li>
+      <li>En IFRS : instruments financiers, tests de dépréciation, information sectorielle (IFRS 8)</li>
+    </ul>
+
+    <div class="alert">
+      <span class="alert-title">📌 Hors Bilan</span>
+      Les <strong>engagements hors bilan</strong> (garanties données, contrats de crédit-bail, passifs éventuels) sont critiques pour l'analyste financier car ils représentent des risques non reflétés dans les agrégats bilanciels standard.
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════
+       PARTIE II — CONTRÔLE DE GESTION
+  ══════════════════════════════════════════════════ -->
+
+  <section class="chapter" id="cdg-intro">
+    <div class="chapter-header">
+      <div class="ch-num">05</div>
+      <div class="ch-titles">
+        <span class="ch-part">Partie II · Contrôle de Gestion</span>
+        <h1 class="ch-title">Fondements du Contrôle de Gestion</h1>
+      </div>
+    </div>
+
+    <div class="def">
+      <strong>Définition (Anthony, 1965) :</strong> Le contrôle de gestion est le processus par lequel les managers influencent les membres de l'organisation pour mettre en œuvre les stratégies de manière efficace et efficiente.
+    </div>
+
+    <h2>Le Triangle Stratégie / Gestion / Opérations</h2>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Niveau</th><th>Horizon</th><th>Outils</th><th>Acteurs</th></tr></thead>
+        <tbody>
+          <tr><td class="bold">Planification stratégique</td><td>3–5 ans</td><td>Plan stratégique, business plan</td><td>DG, Comité de direction</td></tr>
+          <tr><td class="bold">Contrôle de gestion</td><td>1 an (budget)</td><td>Budget, tableaux de bord, reporting</td><td>DAF, Contrôleurs de gestion</td></tr>
+          <tr><td class="bold">Contrôle opérationnel</td><td>Quotidien / hebdo</td><td>Indicateurs opérationnels, OKR</td><td>Managers opérationnels</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <blockquote>
+      « On ne pilote pas une entreprise avec les yeux dans le rétroviseur » — les états financiers annuels ne suffisent pas : il faut des instruments de pilotage en temps quasi réel.
+    </blockquote>
+  </section>
+
+  <!-- ── MÉTHODES DE COÛTS ── -->
+  <section class="chapter" id="couts">
+    <div class="chapter-header">
+      <div class="ch-num">06</div>
+      <div class="ch-titles">
+        <span class="ch-part">Partie II · Contrôle de Gestion</span>
+        <h1 class="ch-title">Méthodes de Calcul des Coûts</h1>
+      </div>
+    </div>
+
+    <h2>1. Coût Complet (Full Costing)</h2>
+    <p>Incorpore <em>toutes</em> les charges (directes + indirectes) dans le coût du produit. Les charges indirectes sont réparties via un tableau de répartition :</p>
+
+    <div class="formula-box">
+      <span class="formula-title">Méthode des centres d'analyse</span>
+      <div class="f">Coût de revient = <span class="hl">Charges directes</span> + Charges indirectes imputées</div>
+      <div class="f">Taux de frais    = <span class="hl">Total charges du centre / Unité d'œuvre (UO)</span></div>
+      <div class="f">Résultat analytique = <span class="hl">Prix de vente − Coût de revient complet</span></div>
+    </div>
+
+    <h2>2. Coût Variable (Direct Costing)</h2>
+    <div class="formula-box">
+      <span class="formula-title">Méthode du Coût Variable — Seuil de Rentabilité</span>
+      <div class="f">Marge sur Coût Variable (MCV) = <span class="hl">CA − Charges variables</span></div>
+      <div class="f">Taux de MCV (τ)              = <span class="hl">MCV / CA</span></div>
+      <div class="f">Seuil de rentabilité (SR)    = <span class="hl">Charges fixes / τ</span></div>
+      <div class="f">Point mort (jours)           = <span class="hl">SR / CA × 365</span></div>
+      <div class="f">Marge de sécurité            = <span class="hl">CA − SR</span></div>
+      <div class="f">Indice de sécurité           = <span class="hl">Marge de sécurité / CA × 100</span></div>
+      <div class="f">Levier opérationnel (DOL)    = <span class="hl">MCV / Résultat exploitation</span></div>
+    </div>
+
+    <div class="alert">
+      <span class="alert-title">📌 Interprétation du Levier Opérationnel</span>
+      Un DOL de 3 signifie qu'une hausse de 1% du CA entraîne une hausse de 3% du résultat d'exploitation. Plus la part de charges fixes est élevée, plus le risque opérationnel est fort.
+    </div>
+
+    <h2>3. Méthode ABC (Activity-Based Costing)</h2>
+    <p>L'ABC attribue les coûts aux produits via des <em>inducteurs d'activité</em> (cost drivers) plutôt que des clés de répartition volumiques.</p>
+    <div class="steps">
+      <div class="step"><div class="step-content"><strong>Identifier les activités</strong> : commande client, contrôle qualité, livraison…</div></div>
+      <div class="step"><div class="step-content"><strong>Affecter les ressources</strong> aux activités (charges par activité)</div></div>
+      <div class="step"><div class="step-content"><strong>Choisir l'inducteur</strong> de chaque activité (nb de commandes, nb de lots, heures machine…)</div></div>
+      <div class="step"><div class="step-content"><strong>Calculer le coût par inducteur</strong> = Coût de l'activité / Volume d'inducteur</div></div>
+      <div class="step"><div class="step-content"><strong>Imputer aux produits</strong> : Coût produit = Σ(coût inducteur × consommation par produit)</div></div>
+    </div>
+
+    <h2>4. Coûts Cibles &amp; Kaizen Costing</h2>
+    <div class="formula-box">
+      <span class="formula-title">Target Costing (conception)</span>
+      <div class="f">Coût cible = <span class="hl">Prix de vente cible − Marge souhaitée</span></div>
+      <div class="f">Écart à résorber = <span class="hl">Coût estimé − Coût cible</span>  <span class="cm">// objectif de réduction</span></div>
+    </div>
+  </section>
+
+  <!-- ── BUDGET ── -->
+  <section class="chapter" id="budget">
+    <div class="chapter-header">
+      <div class="ch-num">07</div>
+      <div class="ch-titles">
+        <span class="ch-part">Partie II · Contrôle de Gestion</span>
+        <h1 class="ch-title">Gestion Budgétaire</h1>
+      </div>
+    </div>
+
+    <h2>Le Processus Budgétaire</h2>
+    <div class="steps">
+      <div class="step"><div class="step-content"><strong>Budget des ventes</strong> (point de départ) : prévisions commerciales × prix</div></div>
+      <div class="step"><div class="step-content"><strong>Budget de production</strong> : ventes + Δ stocks souhaités = production nécessaire</div></div>
+      <div class="step"><div class="step-content"><strong>Budgets des approvisionnements, main-d'œuvre, frais généraux</strong></div></div>
+      <div class="step"><div class="step-content"><strong>Budget d'investissement (CAPEX)</strong> et de financement</div></div>
+      <div class="step"><div class="step-content"><strong>Budget de trésorerie</strong> : synthèse des encaissements et décaissements mensuels</div></div>
+      <div class="step"><div class="step-content"><strong>États financiers prévisionnels</strong> : bilan, CR et TFT pro forma</div></div>
+    </div>
+
+    <h2>Budget de Trésorerie — Structure</h2>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Rubrique</th><th>Jan.</th><th>Fév.</th><th>…</th><th>Déc.</th></tr></thead>
+        <tbody>
+          <tr><td class="bold">Solde initial</td><td class="r">X</td><td class="r">X</td><td class="r">…</td><td class="r">X</td></tr>
+          <tr><td>+ Encaissements clients</td><td class="r">+</td><td class="r">+</td><td class="r">…</td><td class="r">+</td></tr>
+          <tr><td>+ Autres encaissements</td><td class="r">+</td><td class="r">+</td><td class="r">…</td><td class="r">+</td></tr>
+          <tr><td>− Décaissements fournisseurs</td><td class="r">−</td><td class="r">−</td><td class="r">…</td><td class="r">−</td></tr>
+          <tr><td>− Salaires &amp; charges sociales</td><td class="r">−</td><td class="r">−</td><td class="r">…</td><td class="r">−</td></tr>
+          <tr><td>− TVA à décaisser</td><td class="r">−</td><td class="r">−</td><td class="r">…</td><td class="r">−</td></tr>
+          <tr><td>− CAPEX</td><td class="r">−</td><td class="r">−</td><td class="r">…</td><td class="r">−</td></tr>
+          <tr><td class="total bold">= Solde final</td><td class="r total">X</td><td class="r total">X</td><td class="r total">…</td><td class="r total">X</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── ANALYSE DES ÉCARTS ── -->
+  <section class="chapter" id="ecarts">
+    <div class="chapter-header">
+      <div class="ch-num">08</div>
+      <div class="ch-titles">
+        <span class="ch-part">Partie II · Contrôle de Gestion</span>
+        <h1 class="ch-title">Analyse des Écarts</h1>
+      </div>
+    </div>
+
+    <div class="def">
+      <strong>Principe :</strong> L'analyse des écarts compare le <em>réalisé</em> au <em>prévu</em> (standard / budget) et décompose toute déviation pour en identifier les causes.
+    </div>
+
+    <div class="formula-box">
+      <span class="formula-title">Décomposition Générale</span>
+      <div class="f">Écart Total          = <span class="hl">Coût réel − Coût standard</span></div>
+      <div class="f">Écart sur Prix (EP)  = <span class="hl">(Prix réel − Prix standard) × Qté réelle</span></div>
+      <div class="f">Écart sur Quantité   = <span class="hl">(Qté réelle − Qté standard) × Prix standard</span></div>
+      <div class="f">Vérification         = <span class="hl">EP + EQ = Écart Total</span></div>
+    </div>
+
+    <h2>Écarts sur Chiffre d'Affaires</h2>
+    <div class="formula-box">
+      <span class="formula-title">Analyse de l'Écart de CA</span>
+      <div class="f">Écart CA total     = <span class="hl">CA réel − CA budgété</span></div>
+      <div class="f">Écart sur prix vte = <span class="hl">(Px réel − Px budget) × Vol. réel</span></div>
+      <div class="f">Écart sur volume   = <span class="hl">(Vol. réel − Vol. budget) × Px budget</span></div>
+      <div class="f">Écart sur mix      = <span class="hl">(Mix réel − Mix budget) × Vol. réel × Marge/unité</span></div>
+    </div>
+
+    <h2>Conventions de signe</h2>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Écart</th><th>Signe</th><th>Interprétation</th></tr></thead>
+        <tbody>
+          <tr><td>Sur charges</td><td><span class="badge badge-green">Favorable (F)</span></td><td>Réalisé &lt; Budget → économie</td></tr>
+          <tr><td>Sur charges</td><td><span class="badge badge-red">Défavorable (D)</span></td><td>Réalisé &gt; Budget → dépassement</td></tr>
+          <tr><td>Sur CA/marge</td><td><span class="badge badge-green">Favorable (F)</span></td><td>Réalisé &gt; Budget → surperformance</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── TABLEAUX DE BORD & BSC ── -->
+  <section class="chapter" id="tableau-bord">
+    <div class="chapter-header">
+      <div class="ch-num">09</div>
+      <div class="ch-titles">
+        <span class="ch-part">Partie II · Contrôle de Gestion</span>
+        <h1 class="ch-title">Tableaux de Bord &amp; Balanced Scorecard</h1>
+      </div>
+    </div>
+
+    <h2>Tableau de Bord de Gestion</h2>
+    <p>Outil de pilotage synthétique présentant un ensemble d'indicateurs clés (KPIs) sélectionnés pour suivre l'atteinte des objectifs stratégiques et opérationnels, à une fréquence plus élevée que la comptabilité.</p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Propriété</th><th>Bonne pratique</th></tr></thead>
+        <tbody>
+          <tr><td>Nombre d'indicateurs</td><td>5 à 10 maximum par niveau de pilotage (loi de Miller)</td></tr>
+          <tr><td>Fréquence</td><td>Quotidienne, hebdomadaire ou mensuelle selon le métier</td></tr>
+          <tr><td>Alertes</td><td>Système de clignotants (vert / orange / rouge)</td></tr>
+          <tr><td>Lien stratégique</td><td>Chaque indicateur doit être relié à un objectif stratégique</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Balanced Scorecard (BSC) — Kaplan &amp; Norton (1992)</h2>
+    <p>Le BSC équilibre la performance selon <strong>4 perspectives</strong> interdépendantes :</p>
+
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <span class="kpi-name">📈 Perspective Financière</span>
+        <div class="kpi-formula">ROE, ROI, EVA, croissance CA</div>
+        <div class="kpi-desc">Comment créons-nous de la valeur pour les actionnaires ?</div>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-name">👥 Perspective Client</span>
+        <div class="kpi-formula">NPS, part de marché, taux de rétention</div>
+        <div class="kpi-desc">Comment sommes-nous perçus par nos clients ?</div>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-name">⚙️ Processus Internes</span>
+        <div class="kpi-formula">Délai de production, taux de défaut, OEE</div>
+        <div class="kpi-desc">Dans quels processus devons-nous exceller ?</div>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-name">🎓 Apprentissage &amp; Innovation</span>
+        <div class="kpi-formula">Investissement R&D, turnover, formation</div>
+        <div class="kpi-desc">Comment améliorer notre capacité à créer de la valeur ?</div>
+      </div>
+    </div>
+
+    <div class="alert">
+      <span class="alert-title">💡 De la carte stratégique à la Strategy Map</span>
+      La <strong>Strategy Map</strong> (Kaplan &amp; Norton, 2004) formalise les relations de cause à effet entre les objectifs des 4 perspectives, permettant de visualiser la logique de création de valeur de l'entreprise.
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════
+       PARTIE III — GESTION FINANCIÈRE
+  ══════════════════════════════════════════════════ -->
+
+  <section class="chapter" id="diagnostic">
+    <div class="chapter-header">
+      <div class="ch-num">10</div>
+      <div class="ch-titles">
+        <span class="ch-part">Partie III · Gestion Financière</span>
+        <h1 class="ch-title">Diagnostic Financier</h1>
+      </div>
+    </div>
+
+    <div class="def">
+      <strong>Objectif :</strong> Le diagnostic financier analyse la santé financière d'une entreprise selon trois axes : <em>rentabilité</em>, <em>liquidité / solvabilité</em> et <em>structure financière</em>.
+    </div>
+
+    <h2>Grille d'Analyse des Ratios</h2>
+
+    <div class="ratio-section"><span class="ratio-section-title">Ratios de Rentabilité</span></div>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <span class="kpi-name">ROE</span>
+        <div class="kpi-formula">Résultat Net / Capitaux Propres</div>
+        <div class="kpi-desc">Return on Equity — rendement pour l'actionnaire</div>
+        <span class="kpi-bench">Benchmark : > 10–15%</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-name">ROA / ROI</span>
+        <div class="kpi-formula">Résultat Net / Total Actif</div>
+        <div class="kpi-desc">Rentabilité économique des actifs</div>
+        <span class="kpi-bench">Benchmark : > 5%</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-name">ROCE</span>
+        <div class="kpi-formula">EBIT / (CP + Dettes LT)</div>
+        <div class="kpi-desc">Return on Capital Employed — efficacité des capitaux investis</div>
+        <span class="kpi-bench">> WACC idéalement</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-name">Marge EBITDA</span>
+        <div class="kpi-formula">EBITDA / CA HT</div>
+        <div class="kpi-desc">Cash-flow opérationnel sur chiffre d'affaires</div>
+        <span class="kpi-bench">Secteur-dépendant</span>
+      </div>
+    </div>
+
+    <div class="ratio-section"><span class="ratio-section-title">Ratios de Liquidité</span></div>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <span class="kpi-name">Liquidité Générale</span>
+        <div class="kpi-formula">Actif Circulant / Dettes CT</div>
+        <div class="kpi-desc">Capacité à honorer les dettes court terme</div>
+        <span class="kpi-bench">> 1,5 recommandé</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-name">Liquidité Réduite</span>
+        <div class="kpi-formula">(AC − Stocks) / Dettes CT</div>
+        <div class="kpi-desc">Test Acid — sans les stocks (moins liquides)</div>
+        <span class="kpi-bench">> 1 recommandé</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-name">Liquidité Immédiate</span>
+        <div class="kpi-formula">Disponibilités / Dettes CT</div>
+        <div class="kpi-desc">Trésorerie pure disponible face aux dettes immédiates</div>
+        <span class="kpi-bench">> 0,2</span>
+      </div>
+    </div>
+
+    <div class="ratio-section"><span class="ratio-section-title">Ratios de Solvabilité &amp; Endettement</span></div>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <span class="kpi-name">Ratio d'Endettement</span>
+        <div class="kpi-formula">Dettes financières / CP</div>
+        <div class="kpi-desc">Gearing — levier financier</div>
+        <span class="kpi-bench">&lt; 1 (prudent)</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-name">Taux d'endettement net</span>
+        <div class="kpi-formula">Dette nette / EBITDA</div>
+        <div class="kpi-desc">Nombre d'années pour rembourser la dette</div>
+        <span class="kpi-bench">&lt; 3× idéal, &lt; 5× max</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-name">Couverture des intérêts</span>
+        <div class="kpi-formula">EBIT / Charges financières</div>
+        <div class="kpi-desc">Interest Coverage Ratio — capacité à payer les intérêts</div>
+        <span class="kpi-bench">> 3× recommandé</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-name">Autonomie financière</span>
+        <div class="kpi-formula">CP / Total Passif</div>
+        <div class="kpi-desc">Part du passif financée par fonds propres</div>
+        <span class="kpi-bench">> 30%</span>
+      </div>
+    </div>
+
+    <div class="ratio-section"><span class="ratio-section-title">Ratios de Gestion (Rotation)</span></div>
+    <div class="formula-box">
+      <span class="formula-title">Délais de rotation — Composantes du BFR</span>
+      <div class="f">Délai stockage          = <span class="hl">Stocks × 360 / Coût d'achat (ou COGS)</span>          <span class="cm">// jours</span></div>
+      <div class="f">Délai client (DSO)      = <span class="hl">Créances clients TTC × 360 / CA TTC</span>          <span class="cm">// Days Sales Outstanding</span></div>
+      <div class="f">Délai fournisseur (DPO) = <span class="hl">Dettes fournisseurs TTC × 360 / Achats TTC</span>    <span class="cm">// Days Payable Outstanding</span></div>
+      <div class="f">Cycle de conversion cash= <span class="hl">DSO + Délai stock − DPO</span>                          <span class="cm">// Cash Conversion Cycle</span></div>
+    </div>
+  </section>
+
+  <!-- ── FR, BFR, TN ── -->
+  <section class="chapter" id="fr-bfr">
+    <div class="chapter-header">
+      <div class="ch-num">11</div>
+      <div class="ch-titles">
+        <span class="ch-part">Partie III · Gestion Financière</span>
+        <h1 class="ch-title">FR, BFR &amp; Trésorerie Nette</h1>
+      </div>
+    </div>
+
+    <div class="def">
+      <strong>Équation d'équilibre :</strong> <code>Trésorerie Nette = FR − BFR</code>
+    </div>
+
+    <div class="formula-box">
+      <span class="formula-title">Calcul FR, BFR, TN (approche fonctionnelle)</span>
+      <div class="f">FR (Fonds de Roulement)    = <span class="hl">Ressources stables − Emplois stables</span></div>
+      <div class="f">                           = <span class="hl">(CP + Prov. + Dettes LT) − Actif immobilisé (valeur brute)</span></div>
+      <div class="f"></div>
+      <div class="f">BFR (Besoin en FR)         = <span class="hl">Actif circulant d'exploit. − Dettes circulantes d'exploit.</span></div>
+      <div class="f">                           = <span class="hl">(Stocks + Créances) − (Dettes four. + Dettes fiscales &amp; soc.)</span></div>
+      <div class="f"></div>
+      <div class="f">BFR en jours de CA         = <span class="hl">BFR / CA HT × 360</span></div>
+      <div class="f"></div>
+      <div class="f">Trésorerie Nette (TN)      = <span class="hl">FR − BFR</span></div>
+      <div class="f">                         ou = <span class="hl">Disponibilités + VMP − Concours bancaires CT</span></div>
+    </div>
+
+    <h2>Interprétation</h2>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Situation</th><th>FR vs BFR</th><th>Diagnostic</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td><span class="badge badge-green">TN &gt; 0</span></td><td>FR &gt; BFR</td><td>Équilibre financier sain</td><td>Optimiser le placement des excédents</td></tr>
+          <tr><td><span class="badge badge-red">TN &lt; 0</span></td><td>FR &lt; BFR</td><td>Tension de trésorerie</td><td>Réduire BFR, augmenter FR (capital, LT)</td></tr>
+          <tr><td><span class="badge badge-red">FR &lt; 0</span></td><td>—</td><td>Ressources LT insuffisantes pour financer immobilisations</td><td>Recapitalisation ou cession d'actifs</td></tr>
+          <tr><td><span class="badge badge-gold">BFR &lt; 0</span></td><td>—</td><td>BFR négatif (grande distribution) : les clients paient avant les fournisseurs</td><td>Situation favorable à préserver</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── INVESTISSEMENTS ── -->
+  <section class="chapter" id="invest">
+    <div class="chapter-header">
+      <div class="ch-num">12</div>
+      <div class="ch-titles">
+        <span class="ch-part">Partie III · Gestion Financière</span>
+        <h1 class="ch-title">Évaluation des Investissements</h1>
+      </div>
+    </div>
+
+    <div class="def">
+      <strong>Principe :</strong> Tout investissement crée de la valeur si son rendement dépasse le coût du capital. On actualise les flux futurs au taux d'actualisation (WACC ou coût des fonds propres).
+    </div>
+
+    <h2>Les 4 Critères Classiques</h2>
+
+    <div class="formula-box">
+      <span class="formula-title">1 — VAN (Valeur Actuelle Nette / NPV)</span>
+      <div class="f">VAN = −I₀ + Σ <span class="hl">FCFₜ / (1+k)ᵗ</span>   pour t = 1 à n</div>
+      <div class="f"><span class="cm">// Décision : VAN > 0 → projet créateur de valeur</span></div>
+    </div>
+
+    <div class="formula-box">
+      <span class="formula-title">2 — TRI (Taux de Rentabilité Interne / IRR)</span>
+      <div class="f">TRI = taux tel que : <span class="hl">VAN = 0</span></div>
+      <div class="f">Décision : <span class="hl">TRI > WACC</span> → projet acceptable</div>
+      <div class="f"><span class="cm">// Limite : hypothèse de réinvestissement au TRI, insensible à la taille</span></div>
+    </div>
+
+    <div class="formula-box">
+      <span class="formula-title">3 — Délai de Récupération (Payback / DRC)</span>
+      <div class="f">DRC = <span class="hl">date à laquelle ΣCF actualisés = I₀</span></div>
+      <div class="f"><span class="cm">// Critère simple, ignore les flux après récupération. Utilisé en complément.</span></div>
+    </div>
+
+    <div class="formula-box">
+      <span class="formula-title">4 — Indice de Profitabilité (IP)</span>
+      <div class="f">IP = <span class="hl">VAN / I₀</span>   <span class="cm">ou</span>   (I₀ + VAN) / I₀</div>
+      <div class="f">Décision : <span class="hl">IP > 0</span> (ou > 1 selon formule)  <span class="cm">// utile pour comparer des projets de tailles différentes</span></div>
+    </div>
+
+    <h2>WACC — Coût Moyen Pondéré du Capital</h2>
+    <div class="formula-box">
+      <span class="formula-title">Formule WACC</span>
+      <div class="f">WACC = <span class="hl">kE × E/(E+D) + kD × (1−T) × D/(E+D)</span></div>
+      <div class="f"><span class="cm">kE = coût des fonds propres (CAPM), kD = coût de la dette, T = taux IS</span></div>
+      <div class="f"><span class="cm">E = valeur de marché des CP, D = valeur de marché de la dette</span></div>
+    </div>
+
+    <div class="formula-box">
+      <span class="formula-title">CAPM — Coût des Fonds Propres (kE)</span>
+      <div class="f">kE = <span class="hl">Rf + β × (Rm − Rf)</span></div>
+      <div class="f"><span class="cm">Rf = taux sans risque (OAT 10 ans), β = bêta de l'entreprise</span></div>
+      <div class="f"><span class="cm">Rm − Rf = prime de risque marché (historiquement 4–6% en Europe)</span></div>
+    </div>
+  </section>
+
+  <!-- ── FINANCEMENT ── -->
+  <section class="chapter" id="financement">
+    <div class="chapter-header">
+      <div class="ch-num">13</div>
+      <div class="ch-titles">
+        <span class="ch-part">Partie III · Gestion Financière</span>
+        <h1 class="ch-title">Structure de Financement &amp; Effet de Levier</h1>
+      </div>
+    </div>
+
+    <h2>Théorèmes de Modigliani-Miller</h2>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Théorème</th><th>Hypothèses</th><th>Conclusion</th></tr></thead>
+        <tbody>
+          <tr><td>MM I (1958) — Sans IS</td><td>Marchés parfaits, pas d'impôt</td><td>La valeur de la firme est indépendante de sa structure de financement</td></tr>
+          <tr><td>MM II (1958) — Sans IS</td><td>Marchés parfaits, pas d'impôt</td><td>kE augmente linéairement avec le levier ; WACC constant</td></tr>
+          <tr><td>MM (1963) — Avec IS</td><td>Avec impôt sur les sociétés</td><td>La valeur de la firme augmente avec la dette (économie fiscale = T×D)</td></tr>
+          <tr><td>Trade-off Theory</td><td>Avec IS et coûts de faillite</td><td>Structure optimale : équilibre entre économie fiscale et coûts de détresse</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Effet de Levier Financier</h2>
+    <div class="formula-box">
+      <span class="formula-title">Décomposition du ROE (DuPont Analysis)</span>
+      <div class="f">ROE = <span class="hl">Marge nette × Rotation des actifs × Levier financier</span></div>
+      <div class="f">    = <span class="hl">(RN/CA) × (CA/TA) × (TA/CP)</span></div>
+      <div class="f"></div>
+      <div class="f">Formule de l'effet de levier :</div>
+      <div class="f">ROE = <span class="hl">ROA + (ROA − kD) × D/CP</span></div>
+      <div class="f"><span class="cm">// Si ROA > kD → effet de levier positif (amplification du ROE)</span></div>
+      <div class="f"><span class="cm">// Si ROA < kD → effet de levier négatif (destruction de valeur)</span></div>
+    </div>
+
+    <h2>Sources de Financement</h2>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Source</th><th>Type</th><th>Avantages</th><th>Inconvénients</th></tr></thead>
+        <tbody>
+          <tr><td>Autofinancement (CAF)</td><td>Fonds propres internes</td><td>Gratuit, autonomie</td><td>Limite la croissance</td></tr>
+          <tr><td>Augmentation de capital</td><td>Fonds propres externes</td><td>Pas de remboursement</td><td>Dilution, coût élevé</td></tr>
+          <tr><td>Emprunt bancaire</td><td>Dette</td><td>Déductible fiscalement, effet de levier</td><td>Risque, covenants</td></tr>
+          <tr><td>Obligations</td><td>Dette de marché</td><td>Diversification, grandes sommes</td><td>Notation (rating) requise</td></tr>
+          <tr><td>Crédit-bail (leasing)</td><td>Quasi-dette</td><td>Pas d'immobilisation (PCG), 100% financement</td><td>Coût total élevé</td></tr>
+          <tr><td>Capital-risque / PE</td><td>Fonds propres</td><td>Apport compétences</td><td>Dilution forte, exit imposé</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── CRÉATION DE VALEUR ── -->
+  <section class="chapter" id="valeur">
+    <div class="chapter-header">
+      <div class="ch-num">14</div>
+      <div class="ch-titles">
+        <span class="ch-part">Partie III · Gestion Financière</span>
+        <h1 class="ch-title">Création de Valeur — EVA &amp; DCF</h1>
+      </div>
+    </div>
+
+    <h2>Economic Value Added (EVA) — Stern Stewart</h2>
+    <div class="formula-box">
+      <span class="formula-title">EVA / Valeur Économique Ajoutée</span>
+      <div class="f">EVA = <span class="hl">NOPAT − WACC × Capital Investi</span></div>
+      <div class="f">    = <span class="hl">EBIT × (1−T) − WACC × (CP + Dettes financières)</span></div>
+      <div class="f"><span class="cm">// EVA > 0 → création de valeur ; EVA < 0 → destruction de valeur</span></div>
+      <div class="f"></div>
+      <div class="f">MVA (Market Value Added) = <span class="hl">Valeur de marché − Capital investi</span></div>
+      <div class="f">                        = <span class="hl">Σ EVAₜ actualisées au WACC</span></div>
+    </div>
+
+    <h2>Valorisation par DCF (Discounted Cash Flows)</h2>
+    <div class="formula-box">
+      <span class="formula-title">Valeur d'Entreprise (Enterprise Value)</span>
+      <div class="f">EV = Σ <span class="hl">FCFFₜ / (1+WACC)ᵗ</span> + <span class="hl">TV / (1+WACC)ⁿ</span></div>
+      <div class="f"></div>
+      <div class="f">Terminal Value (TV, Gordon-Shapiro) :</div>
+      <div class="f">TV = <span class="hl">FCFFₙ × (1+g) / (WACC − g)</span>   <span class="cm">// g = taux de croissance perpétuel</span></div>
+      <div class="f"></div>
+      <div class="f">Valeur des fonds propres (Equity Value) :</div>
+      <div class="f">EqV = <span class="hl">EV − Dette nette</span>  <span class="cm">// (EV − Dettes fin. + Trésorerie)</span></div>
+    </div>
+
+    <h2>Multiples de Valorisation</h2>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Multiple</th><th>Formule</th><th>Secteurs typiques</th></tr></thead>
+        <tbody>
+          <tr><td>EV/EBITDA</td><td>EV / EBITDA</td><td>Industrie, M&amp;A (8–12× typique)</td></tr>
+          <tr><td>EV/EBIT</td><td>EV / EBIT</td><td>Groupes diversifiés</td></tr>
+          <tr><td>P/E (PER)</td><td>Cours / BPA</td><td>Marchés boursiers (15–20× moyen)</td></tr>
+          <tr><td>P/B</td><td>Capitalisation / Actif net</td><td>Banques, assurances</td></tr>
+          <tr><td>EV/Revenues</td><td>EV / CA</td><td>Tech/SaaS (high-growth)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════
+       PARTIE IV — SYNTHÈSE
+  ══════════════════════════════════════════════════ -->
+
+  <section class="chapter" id="kpi-master">
+    <div class="chapter-header">
+      <div class="ch-num">15</div>
+      <div class="ch-titles">
+        <span class="ch-part">Partie IV · Synthèse</span>
+        <h1 class="ch-title">Tableau de Synthèse des KPIs Essentiels</h1>
+      </div>
+    </div>
+
+    <p>Ce tableau rassemble les indicateurs incontournables à maîtriser pour tout diagnostic financier de niveau master :</p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Indicateur</th><th>Formule condensée</th><th>Domaine</th><th>Lecture / Benchmark</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="bold">CA &amp; Croissance</td><td><code>ΔCA = (CA n − CA n-1) / CA n-1</code></td><td>Performance</td><td>Tendance sectorielle</td></tr>
+          <tr><td class="bold">Taux de marge brute</td><td><code>Marge brute / CA</code></td><td>Exploitation</td><td>Comparaison pairs</td></tr>
+          <tr><td class="bold">Taux d'EBITDA</td><td><code>EBITDA / CA</code></td><td>Cash opérationnel</td><td>Secteur-dépendant</td></tr>
+          <tr><td class="bold">Résultat net / CA</td><td><code>RN / CA</code></td><td>Profitabilité finale</td><td>> 5% bon signal</td></tr>
+          <tr><td class="bold">ROE</td><td><code>RN / CP</code></td><td>Rentabilité actionnaire</td><td>> 10–15%</td></tr>
+          <tr><td class="bold">ROCE</td><td><code>EBIT / (CP + D LT)</code></td><td>Rentabilité éco.</td><td>> WACC</td></tr>
+          <tr><td class="bold">FR</td><td><code>Ress. stables − Emplois stables</code></td><td>Structure</td><td>> 0</td></tr>
+          <tr><td class="bold">BFR (jours)</td><td><code>BFR / CA × 360</code></td><td>Besoin trésorerie</td><td>Minimiser (vs secteur)</td></tr>
+          <tr><td class="bold">Trésorerie nette</td><td><code>FR − BFR</code></td><td>Liquidité</td><td>> 0</td></tr>
+          <tr><td class="bold">Gearing</td><td><code>Dettes fin. / CP</code></td><td>Endettement</td><td>&lt; 1</td></tr>
+          <tr><td class="bold">Dette nette / EBITDA</td><td><code>Dette nette / EBITDA</code></td><td>Levier</td><td>&lt; 3–5×</td></tr>
+          <tr><td class="bold">Couverture intérêts</td><td><code>EBIT / Charges fin.</code></td><td>Solvabilité</td><td>> 3×</td></tr>
+          <tr><td class="bold">DSO</td><td><code>Créances × 360 / CA TTC</code></td><td>Gestion BFR</td><td>Minimiser</td></tr>
+          <tr><td class="bold">DPO</td><td><code>Dettes four. × 360 / Achats TTC</code></td><td>Gestion BFR</td><td>Maximiser (dans limites)</td></tr>
+          <tr><td class="bold">CAF / CA</td><td><code>CAF / CA HT</code></td><td>Autofinancement</td><td>> 5–8%</td></tr>
+          <tr><td class="bold">WACC</td><td><code>kE × E/(E+D) + kD(1−T) × D/(E+D)</code></td><td>Coût du capital</td><td>Taux minimal de rendement</td></tr>
+          <tr><td class="bold">VAN</td><td><code>−I₀ + Σ FCF/(1+k)ᵗ</code></td><td>Investissement</td><td>> 0</td></tr>
+          <tr><td class="bold">TRI</td><td><code>VAN = 0</code></td><td>Investissement</td><td>> WACC</td></tr>
+          <tr><td class="bold">EVA</td><td><code>NOPAT − WACC × Capital inv.</code></td><td>Valeur créée</td><td>> 0</td></tr>
+          <tr><td class="bold">EV/EBITDA</td><td><code>EV / EBITDA</code></td><td>Valorisation</td><td>8–12× (industrie)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── MÉTHODOLOGIE ── -->
+  <section class="chapter" id="methodo">
+    <div class="chapter-header">
+      <div class="ch-num">16</div>
+      <div class="ch-titles">
+        <span class="ch-part">Partie IV · Synthèse</span>
+        <h1 class="ch-title">Méthodologie d'Analyse Financière Complète</h1>
+      </div>
+    </div>
+
+    <p>Un diagnostic financier rigoureux suit un cheminement structuré :</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-content">
+          <strong>Lecture qualitative</strong><br>
+          Secteur, positionnement concurrentiel, modèle économique, contexte macro. Lire le rapport de gestion et l'annexe avant les chiffres.
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-content">
+          <strong>Analyse de l'activité et des SIG</strong><br>
+          Évolution du CA, des marges (brute, EBE, exploitation, nette), identification des ruptures.
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-content">
+          <strong>Analyse de la structure financière (bilan fonctionnel)</strong><br>
+          Calcul FR, BFR, TN. Lecture des grandes masses. Solidité des ressources stables.
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-content">
+          <strong>Analyse de la trésorerie (TFT)</strong><br>
+          FTO, FTI, FTF. Qualité du cash-flow. CAPEX vs. amortissements (intensité capitalistique).
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-content">
+          <strong>Analyse des ratios</strong><br>
+          Rentabilité (ROE, ROCE, marges), liquidité, solvabilité, gestion. Comparaison dans le temps (tendance) et à des pairs (benchmark sectoriel).
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-content">
+          <strong>Synthèse &amp; diagnostic</strong><br>
+          Forces / Faiblesses / Risques. Conclusions sur la création de valeur, la soutenabilité de la dette et les perspectives.
+        </div>
+      </div>
+    </ol>
+
+    <div class="alert">
+      <span class="alert-title">⭐ Règle d'or</span>
+      Un ratio seul ne dit rien. <strong>La comparaison dans le temps</strong> (analyse de tendance sur 3–5 ans) et <strong>la comparaison sectorielle</strong> (benchmarking) sont indispensables pour donner un sens à tout indicateur financier.
+    </div>
+
+    <hr class="divider">
+
+    <h2>Les 10 Pièges à Éviter en Analyse Financière</h2>
+    <ul class="checklist">
+      <li>Confondre résultat comptable et trésorerie (accruals vs. cash)</li>
+      <li>Ignorer les engagements hors bilan (crédit-bail, garanties, retraites)</li>
+      <li>Analyser un ratio sans benchmark sectoriel</li>
+      <li>Négliger la qualité des revenus (récurrents vs. exceptionnels)</li>
+      <li>Confondre chiffre d'affaires et création de valeur</li>
+      <li>Surestimer la valeur terminale dans un DCF (>70% de la VAN)</li>
+      <li>Ignorer les politiques comptables (méthodes d'amortissement, évaluation stocks)</li>
+      <li>Oublier les effets de la saisonnalité sur le BFR et la trésorerie</li>
+      <li>Utiliser le TRI comme seul critère de décision d'investissement (multiplicité des TRI)</li>
+      <li>Confondre valeur d'entreprise (EV) et valeur des fonds propres (Equity Value)</li>
+    </ul>
+  </section>
+
+</main>
+
+<!-- ═══════════════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════════════════ -->
+<footer class="page-footer">
+  <div>Accounting &amp; Control — <span>Cours Master M2</span></div>
+  <div>Référentiels : <span>PCG · IFRS · IAS</span></div>
+</footer>
+
+</body>
+</html>
